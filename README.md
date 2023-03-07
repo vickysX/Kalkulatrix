@@ -1,0 +1,2 @@
+# Kalkulatrix
+Standard calculator app
