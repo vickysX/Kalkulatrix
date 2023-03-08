@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Kalkulatrix</string>
+
+    <string name="plus_operator">+</string>
+    <string name="minus_operator">-</string>
+    <string name="times_operator">x</string>
+    <string name="divide_operator">:</string>
+    <string name="percentage_operator">%</string>
 </resources>
