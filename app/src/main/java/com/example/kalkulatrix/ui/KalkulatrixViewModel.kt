@@ -22,7 +22,7 @@ class KalkulatrixViewModel : ViewModel() {
         resetKalk()
     }
 
-    fun resetKalk() {
+    private fun resetKalk() {
         _uiState.value = KalkulatrixUIState()
     }
 
@@ -32,38 +32,58 @@ class KalkulatrixViewModel : ViewModel() {
         userInput = sb.toString()
     }
 
-    fun updateTemporaryResult(operation : Operation) {
-        var notEqualClicks = _uiState.value.notEqualClicks
-        when (notEqualClicks) {
-            0 -> _uiState.update{ currentState ->
-                currentState.copy(
-                    result = userInput.toDouble(),
-                    operator = operation
+    fun applyOperator(operation : Operation) {
+        if (operation == Operation.Equals) {
+            onEqualPressed()
+        } else if (operation == Operation.Reset) {
+            resetKalk()
+        } else {
+            var notEqualClicks = _uiState.value.notEqualClicks
+            when (notEqualClicks) {
+                0 -> _uiState.update{ currentState ->
+                    currentState.copy(
+                        result = userInput.toDouble(),
+                        operator = operation
+                    )
+                }
+                else -> calculateResult(
+                    _uiState.value.result,
+                    userInput.toDouble(),
+                    _uiState.value.operator
                 )
             }
-            else -> calculateResult(
-                _uiState.value.result,
-                userInput.toDouble(),
-                _uiState.value.operator
-            )
+            notEqualClicks++
+            _uiState.update { currentState ->
+                currentState.copy(
+                    notEqualClicks = notEqualClicks
+                )
+            }
         }
-        notEqualClicks++
+    }
+
+    private fun onEqualPressed() {
+        calculateResult(
+            _uiState.value.result,
+            userInput.toDouble(),
+            _uiState.value.operator
+        )
         _uiState.update { currentState ->
             currentState.copy(
-                notEqualClicks = notEqualClicks
+                notEqualClicks = 0
             )
         }
     }
 
-    fun calculateResult(
+    private fun calculateResult(
         num1 : Double,
         num2 : Double,
         operation: Operation?
     ) {
         val result = when (operation) {
             Operation.Addition -> add(num1, num2)
-            Operation.Subtraction -> add(num1, -num2)
+            Operation.Subtraction -> subtract(num1, num2)
             Operation.Multiplication -> mult(num1, num2)
+            Operation.Percentage -> calcPerc(num1, num2)
             else -> divide(num1, num2)
         }
         _uiState.update {currentState ->
@@ -78,11 +98,19 @@ class KalkulatrixViewModel : ViewModel() {
         num1 + num2
     }
 
+    private val subtract : (Double, Double) -> Double = {num1, num2 ->
+        num1 - num2
+    }
+
     private val mult : (Double, Double) -> Double = {num1, num2 ->
         num1 * num2
     }
 
     private val divide : (Double, Double) -> Double = {num1, num2 ->
         num1 / num2
+    }
+
+    private val calcPerc : (Double, Double) -> Double = {num1, num2 ->
+        mult(divide(num1, 100.0), num2)
     }
 }

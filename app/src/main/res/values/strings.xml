@@ -6,4 +6,13 @@
     <string name="times_operator">x</string>
     <string name="divide_operator">:</string>
     <string name="percentage_operator">%</string>
+
+    <string name="reset_calc">C</string>
+    <string name="equals_btn">=</string>
+
+    <string-array name="numbers">
+        <item>7</item>
+        <item>8</item>
+
+    </string-array>
 </resources>
