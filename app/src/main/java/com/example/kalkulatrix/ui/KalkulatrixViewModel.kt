@@ -15,8 +15,8 @@ class KalkulatrixViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(KalkulatrixUIState())
     val uiState : StateFlow<KalkulatrixUIState> = _uiState.asStateFlow()
 
-    var userInput by mutableStateOf("")
-        private set
+    /*var userInput by mutableStateOf("")
+        private set*/
 
     init {
         resetKalk()
@@ -27,32 +27,38 @@ class KalkulatrixViewModel : ViewModel() {
     }
 
     fun updateUserInput(input : String) {
-        val sb = StringBuilder(userInput)
+        val sb = StringBuilder(_uiState.value.userInput)
         sb.append(input)
-        userInput = sb.toString()
+        _uiState.update { currentState ->
+            currentState.copy(
+                userInput = sb.toString()
+            )
+        }
+
     }
 
-    fun applyOperator(operation : Operation) {
-        if (operation == Operation.Equals) {
+    fun applyOperator(operator : Pair<Operation, String>) {
+        if (operator.first == Operation.Equals) {
             onEqualPressed()
-        } else if (operation == Operation.Reset) {
+        } else if (operator.first == Operation.Reset) {
             resetKalk()
         } else {
             var notEqualClicks = _uiState.value.notEqualClicks
             when (notEqualClicks) {
                 0 -> _uiState.update{ currentState ->
                     currentState.copy(
-                        result = userInput.toDouble(),
-                        operator = operation
+                        result = _uiState.value.userInput.toDouble(),
+                        operator = operator.first
                     )
                 }
                 else -> calculateResult(
                     _uiState.value.result,
-                    userInput.toDouble(),
+                    _uiState.value.userInput.toDouble(),
                     _uiState.value.operator
                 )
             }
             notEqualClicks++
+            updateUserInput(operator.second)
             _uiState.update { currentState ->
                 currentState.copy(
                     notEqualClicks = notEqualClicks
@@ -64,12 +70,14 @@ class KalkulatrixViewModel : ViewModel() {
     private fun onEqualPressed() {
         calculateResult(
             _uiState.value.result,
-            userInput.toDouble(),
+            _uiState.value.userInput.toDouble(),
             _uiState.value.operator
         )
         _uiState.update { currentState ->
             currentState.copy(
-                notEqualClicks = 0
+                notEqualClicks = 0,
+                userInput = "",
+                //operator = null
             )
         }
     }

@@ -6,10 +6,12 @@ import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -20,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.kalkulatrix.ui.KalkulatrixViewModel
 import com.example.kalkulatrix.ui.ScientificCalculatorScreen
 import com.example.kalkulatrix.ui.StandardCalculatorScreen
+import com.example.kalkulatrix.ui.components.KalkDisplay
 
 enum class CurrentKalk {
     Standard, Scientific
@@ -34,6 +37,9 @@ fun KalkulatrixApp(
     val kalkUIState by viewModel.uiState.collectAsState()
     val currentScreen by navController.currentBackStackEntryAsState()
     Column {
+        KalkDisplay(
+            userInput = kalkUIState.userInput
+        )
         IconButton(
             onClick = {
                 switchKalk(navController, currentScreen)

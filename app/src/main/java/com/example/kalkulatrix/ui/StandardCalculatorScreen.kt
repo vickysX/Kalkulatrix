@@ -7,7 +7,7 @@ import com.example.kalkulatrix.Operation
 @Composable
 fun StandardCalculatorScreen(
     modifier: Modifier = Modifier,
-    onOperationButtonClicked : (Operation) -> Unit,
+    onOperationButtonClicked : (Pair<Operation, String>) -> Unit,
     onNumberClicked : (String) -> Unit
 ) {
 
