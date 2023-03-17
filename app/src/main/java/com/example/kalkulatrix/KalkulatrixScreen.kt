@@ -69,7 +69,8 @@ fun KalkulatrixApp(
                     onOperationButtonClicked = {
                         viewModel.applyOperator(it)
                     },
-                    onNumberClicked = {viewModel.updateUserInput(it)}
+                    onNumberClicked = {viewModel.updateUserInput(it)},
+                    modifier = Modifier.padding(top = 16.dp)
                 )
             }
             composable(route = CurrentKalk.Scientific.name) {

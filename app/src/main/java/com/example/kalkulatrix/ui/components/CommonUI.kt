@@ -79,9 +79,14 @@ fun NumericKeyboard(
     nums : List<List<Int>> = numbers,
     onNumberClicked: (String) -> Unit
 ) {
-    Column() {
+    val space = dimensionResource(id = R.dimen.btn_space)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(space)
+    ) {
         nums.map {
-            Row() {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(space)
+            ) {
                 it.map {num ->
                    NumericButton(
                        number = num,
@@ -91,16 +96,6 @@ fun NumericKeyboard(
             }
         }
     }
-    /*LazyVerticalGrid(
-        columns = GridCells.Fixed(3)
-    ) {
-        items(nums) {
-            NumericButton(
-                number = it,
-                onNumberClicked = onNumberClicked
-            )
-        }
-    }*/
 }
 
 @Composable
@@ -152,7 +147,7 @@ fun KalkDisplay(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentWidth(Alignment.End)
-            .padding(8.dp)
+            .padding(start = 8.dp, end = 8.dp, top = 80.dp, bottom = 80.dp)
     ) {
         Text(
             text = userInput,

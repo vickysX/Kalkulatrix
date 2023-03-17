@@ -35,28 +35,23 @@ fun StandardCalculatorScreen(
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(space = space),
-            /*modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentWidth()*/
-                //.weight(1f)
         ) {
             horizontalRow.map {
                 OperationButton(
                     onButtonClicked = onOperationButtonClicked,
                     operation = it,
-                    /*modifier = when (it) {
-                        Operation.Reset -> Modifier.weight(2f)
-                        else -> Modifier.weight(1f)
-                    }*/
-
                 )
             }
         }
-        Row {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(space)
+        ) {
             NumericKeyboard(
                 onNumberClicked = onNumberClicked
             )
-            Column() {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(space)
+            ) {
                verticalColumn.map {
                    OperationButton(
                        onButtonClicked = onOperationButtonClicked,
@@ -65,42 +60,6 @@ fun StandardCalculatorScreen(
                }
             }
         }
-        /*LazyRow(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-        ) {
-            items(horizontalRow) {
-                OperationButton(
-                    onButtonClicked = onOperationButtonClicked,
-                    operation = it
-                )
-            }
-        }*/
-        /*Row(
-            modifier = Modifier
-                .weight(4f)
-                .fillMaxWidth()
-        ) {
-            NumericKeyboard(
-                onNumberClicked = onNumberClicked,
-                modifier = Modifier
-                    .weight(3f)
-                    .wrapContentWidth(Alignment.Start)
-            )
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .wrapContentWidth(Alignment.End)
-            ) {
-                items(verticalColumn) {
-                    OperationButton(
-                        onButtonClicked = onOperationButtonClicked,
-                        operation = it
-                    )
-                }
-            }
-        }*/
     }
 }
 

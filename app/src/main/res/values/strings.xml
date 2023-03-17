@@ -2,9 +2,9 @@
     <string name="app_name">Kalkulatrix</string>
 
     <string name="plus_operator">+</string>
-    <string name="minus_operator">-</string>
-    <string name="times_operator">x</string>
-    <string name="divide_operator">:</string>
+    <string name="minus_operator">\u2212</string>
+    <string name="times_operator">\u00d7</string>
+    <string name="divide_operator">\u00f7</string>
     <string name="percentage_operator">%</string>
 
     <string name="reset_calc">C</string>
