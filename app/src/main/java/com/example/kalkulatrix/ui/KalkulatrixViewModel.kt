@@ -1,8 +1,5 @@
 package com.example.kalkulatrix.ui
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.kalkulatrix.Operation
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,8 +12,6 @@ class KalkulatrixViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(KalkulatrixUIState())
     val uiState : StateFlow<KalkulatrixUIState> = _uiState.asStateFlow()
 
-    /*var userInput by mutableStateOf("")
-        private set*/
 
     init {
         resetKalk()
@@ -27,20 +22,30 @@ class KalkulatrixViewModel : ViewModel() {
     }
 
     fun updateUserInput(input : String) {
-        val sb = StringBuilder(_uiState.value.userInput)
-        sb.append(input)
-        _uiState.update { currentState ->
-            currentState.copy(
-                userInput = sb.toString()
-            )
-        }
+        val sb = when  {
+            (input != "." || !_uiState.value.userInput.contains("."))
+                    && _uiState.value.inputEnded  -> StringBuilder()
 
+            else -> StringBuilder(_uiState.value.userInput)
+        }
+        sb.append(input)
+         _uiState.update { currentState ->
+             currentState.copy(
+                 userInput = sb.toString(),
+                 inputEnded = false
+             )
+         }
     }
 
-    fun applyOperator(operator : Pair<Operation, String>) {
-        if (operator.first == Operation.Equals) {
+    fun applyOperator(operator : Operation) {
+        _uiState.update {
+            it.copy(
+                inputEnded = true
+            )
+        }
+        if (operator == Operation.Equals) {
             onEqualPressed()
-        } else if (operator.first == Operation.Reset) {
+        } else if (operator == Operation.Reset) {
             resetKalk()
         } else {
             var notEqualClicks = _uiState.value.notEqualClicks
@@ -48,7 +53,7 @@ class KalkulatrixViewModel : ViewModel() {
                 0 -> _uiState.update{ currentState ->
                     currentState.copy(
                         result = _uiState.value.userInput.toDouble(),
-                        operator = operator.first
+                        operator = operator
                     )
                 }
                 else -> calculateResult(
@@ -58,7 +63,6 @@ class KalkulatrixViewModel : ViewModel() {
                 )
             }
             notEqualClicks++
-            updateUserInput(operator.second)
             _uiState.update { currentState ->
                 currentState.copy(
                     notEqualClicks = notEqualClicks
@@ -76,8 +80,7 @@ class KalkulatrixViewModel : ViewModel() {
         _uiState.update { currentState ->
             currentState.copy(
                 notEqualClicks = 0,
-                userInput = "",
-                //operator = null
+                userInput = _uiState.value.result.toString(),
             )
         }
     }
@@ -88,37 +91,17 @@ class KalkulatrixViewModel : ViewModel() {
         operation: Operation?
     ) {
         val result = when (operation) {
-            Operation.Addition -> add(num1, num2)
-            Operation.Subtraction -> subtract(num1, num2)
-            Operation.Multiplication -> mult(num1, num2)
-            Operation.Percentage -> calcPerc(num1, num2)
-            else -> divide(num1, num2)
+            Operation.Addition -> num1 + num2
+            Operation.Subtraction -> num1 - num2
+            Operation.Multiplication -> num1 * num2
+            Operation.Percentage -> (num1 / 100.0) * num2
+            else -> num1 / num2
         }
         _uiState.update {currentState ->
             currentState.copy(
-                result = result,
-                operator = null
+                result = result
             )
         }
     }
 
-    private val add : (Double, Double) -> Double = {num1, num2 ->
-        num1 + num2
-    }
-
-    private val subtract : (Double, Double) -> Double = {num1, num2 ->
-        num1 - num2
-    }
-
-    private val mult : (Double, Double) -> Double = {num1, num2 ->
-        num1 * num2
-    }
-
-    private val divide : (Double, Double) -> Double = {num1, num2 ->
-        num1 / num2
-    }
-
-    private val calcPerc : (Double, Double) -> Double = {num1, num2 ->
-        mult(divide(num1, 100.0), num2)
-    }
 }

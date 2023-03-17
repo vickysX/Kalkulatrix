@@ -14,13 +14,14 @@ val digital = FontFamily(
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    headlineMedium = TextStyle(
+    headlineLarge = TextStyle(
         fontFamily = digital,
+        fontSize = 90.sp
     ),
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
+        fontSize = 36.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     )
