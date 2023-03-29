@@ -53,7 +53,6 @@ class KalkulatrixViewModel : ViewModel() {
                 0 -> _uiState.update{ currentState ->
                     currentState.copy(
                         result = _uiState.value.userInput.toDouble(),
-                        //operator = operator
                     )
                 }
                 else -> calculateResult(
@@ -81,7 +80,7 @@ class KalkulatrixViewModel : ViewModel() {
         _uiState.update { currentState ->
             currentState.copy(
                 notEqualClicks = 0,
-                userInput = _uiState.value.result.toString(),
+                userInput = _uiState.value.result.toString() /*String.format("%.f", _uiState.value.result)*/
             )
         }
     }
